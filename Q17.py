@@ -1,35 +1,34 @@
 import sys
-import copy
+from collections import deque
 input = sys.stdin.readline
 
 n, k = map(int, input().split())
-
 graph = []
+data = []
 
-for _ in range(n):
+for i in range(n):
     graph.append(list(map(int, input().split())))
+    for j in range(n):
+        if graph[i][j] != 0:
+            data.append((graph[i][j], 0, i, j))
+data.sort()
+q = deque(data)
 
-s, x, y = map(int, input().split())
+target_s, target_x, target_y = map(int, input().split())
 
 dx = [0, 1, 0, -1]
 dy = [1, 0, -1, 0]
 
-def virus(current, graph, cop, x, y):
+while q:
+    virus, s, x, y = q.popleft()
+    if s == target_s:
+        break
     for i in range(4):
         nx = x + dx[i]
         ny = y + dy[i]
-        if nx >= 0 and ny >= 0 and nx < n and ny < n:
-            if graph[nx][ny] == 0 and cop[nx][ny] == 0:
-                graph[nx][ny] = current
-    return temp
+        if 0 <= nx and 0 <= ny and n > nx and n > ny:
+            if graph[nx][ny] == 0:
+                graph[nx][ny] = virus
+                q.append((virus, s + 1, nx, ny))
 
-for time in range(s):
-    temp = copy.deepcopy(graph)
-    for i in range(n):
-        for j in range(n):
-            if graph[i][j] != 0:
-                temp = virus(graph[i][j], graph, temp, i, j)
-
-    graph = copy.deepcopy(temp)
-    print(graph)
-print(graph[x-1][y-1])
+print(graph[target_x - 1][target_y - 1])
