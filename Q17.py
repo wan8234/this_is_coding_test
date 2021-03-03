@@ -33,3 +33,4 @@ for time in range(s):
     graph = copy.deepcopy(temp)
     print(graph)
 print(graph[x-1][y-1])
+print()
